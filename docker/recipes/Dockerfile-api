@@ -1,0 +1,19 @@
+FROM ubuntu:latest
+
+ENV VERSION 1.6
+
+RUN sudo apt-get -y update && sudo apt-get install -y curl git
+RUN curl -sL "https://storage.googleapis.com/golang/go${VERSION}.linux-amd64.tar.gz" | tar -C /usr/local -xzf -
+ENV PATH $PATH:/usr/local/go/bin
+ENV GOPATH /go
+RUN go get github.com/constabulary/gb/...
+
+ADD . /go/src/github.com/drawclash/drawclash-api
+WORKDIR /go/src/github.com/drawclash/drawclash-api
+
+# ENV HMS_DB_URL postgres://hermes@db/hermes?sslmode=disable
+RUN ./build
+
+CMD ./bin/drawclash
+
+EXPOSE 8080

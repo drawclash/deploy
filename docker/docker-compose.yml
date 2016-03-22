@@ -1,0 +1,17 @@
+version: '2'
+services:
+  db:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-db
+    expose:
+      - 5432
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-api
+    ports:
+      - "8080:80"
+    links:
+      - db

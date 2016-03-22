@@ -1,0 +1,31 @@
+---
+- name: install packages
+  sudo: yes
+  apt: "name={{ item }} state=present update_cache=yes"
+  with_items:
+    - build-essential
+    - libreadline-dev
+    - libssl-dev
+    - zlib1g-dev
+    - git-core
+
+- include: docker.yml
+  sudo: yes
+
+- name: copy recipes
+  sudo: yes
+  copy:
+    src: ../docker
+    dest: /var/www/drawclash
+
+- name: create services directory
+  file: path=/var/www/drawclash/services state=directory mode=0755 owner=vagrant
+  sudo: yes
+
+- include: migrations.yml
+
+- name: assemble containers
+  shell: docker-compose up
+  sudo: yes
+  args:
+    chdir: /var/www/drawclash/docker

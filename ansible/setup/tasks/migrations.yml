@@ -1,0 +1,6 @@
+---
+- name: migrations | clone repo
+  git: repo=https://github.com/drawclash/migrations.git dest=/var/www/drawclash/services/migrations
+
+- name: migrations | database config
+  template: 'src=database.yml.j2 dest=/var/www/drawclash/services/migrations/db/config.yml force=yes mode=755'

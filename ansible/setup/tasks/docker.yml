@@ -1,0 +1,21 @@
+---
+# - name: docker | check docker installation
+#   shell: which docker
+#   register: check_docker
+#   # ignore_errors: yes
+
+# - name: docker | check docker compose installation
+#   shell: which docker-compose
+#   register: check_compose
+#   # ignore_errors: yes
+
+- name: docker | install docker
+  shell: curl -sSL https://get.docker.com/gpg | sudo apt-key add -
+  # when: check_docker|failed
+
+- name: docker | install docker-compose
+  shell: curl -L https://github.com/docker/compose/releases/download/1.6.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+  # when: check_compose|failed
+
+- name: docker | change permissions
+  shell: chmod +x /usr/local/bin/docker-compose
